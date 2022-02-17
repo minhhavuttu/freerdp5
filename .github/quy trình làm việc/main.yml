@@ -1,0 +1,49 @@
+tên: CI
+
+ 
+
+trên: [push, workflow_dispatch]
+
+ 
+
+việc làm:
+
+  xây dựng:
+
+ 
+
+    chạy trên: windows-mới nhất
+
+ 
+
+    các bước:
+
+    - tên: Tải xuống
+
+      run: Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+
+    - tên: Trích xuất
+
+      run: Mở rộng-Lưu trữ ngrok.zip
+
+    - tên: Auth
+
+      run:. \ ngrok \ ngrok.exe authtoken $ Env: NGROK_AUTH_TOKEN
+
+      vi:
+
+        NGROK_AUTH_TOKEN: $ {{secret.NGROK_AUTH_TOKEN}}
+
+    - name: Cho phép TS
+
+      run: Set-ItemProperty -Path 'HKLM: \ System \ CurrentControlSet \ Control \ Terminal Server'-name "fDenyTSConnections" -Giá trị 0
+
+    - chạy: Enable-NetFirewallRule -DisplayGroup "Máy tính từ xa"
+
+    - run: Set-ItemProperty -Path 'HKLM: \ System \ CurrentControlSet \ Control \ Terminal Server \ WinStations \ RDP-Tcp' -name "UserAuthentication" -Giá trị 1
+
+    - run: Set-LocalUser -Tên "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P @ ssw0rd!" -Force)
+
+    - tên: Tạo đường hầm
+
+      run:. \ ngrok \ ngrok.exe tcp 3389
